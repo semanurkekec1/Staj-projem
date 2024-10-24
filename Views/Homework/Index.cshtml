@@ -1,0 +1,146 @@
+﻿@model Homework
+@using System.Globalization;
+@{
+    Layout = "_Layout2";
+    ViewData["Title"] = Model.Name + " - Homework";
+}
+
+@section CSSSection {
+    <style>
+        .card-custom {
+            max-width: 300px;
+            margin: 20px;
+        }
+
+        .card-custom {
+            width: 100%;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .project-header img {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+
+        .project-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: -20px;
+        }
+
+        .text-small {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+}
+<div class="container mt-5">
+    <div class="row align-items-stretch">
+        <div class="col-md-7 d-flex">
+            <div class="card shadow-sm flex-fill">
+                <div class="card-body">
+                    <div class="project-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-pen m-3"></i>
+                            <div>
+                                <h5 class="card-title">@Model.Name</h5>
+                                <p class="text-small">@Model.ApplicationUser.Name @Model.ApplicationUser.Surname &middot; @(Model.CreatedAt.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") ? Model.CreatedAt.ToString("HH:mm") : Model.CreatedAt.ToString("dMMMM", CultureInfo.CreateSpecificCulture("en-US")))</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-info">
+                        <p><strong>Your Score: @(ViewBag.HomeworkUser.Point == -1 ? "?" : ViewBag.HomeworkUser.Point)/100</strong></p>
+                        <span class="text-small">Due @Model.DueDate.ToString("dMMMM", CultureInfo.CreateSpecificCulture("en-US")) @Model.DueDate.ToString("HH:mm")</span>
+                    </div>
+
+                    <hr>
+
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+        @if (ViewBag.HomeworkUser.Work != null)
+        {
+            <div class="col-md-5 d-flex">
+                <div class="card card-custom shadow-sm flex-fill">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Your work</h5>
+                        @if (DateTime.Now > Model.DueDate)
+                        {
+                            <h6 class="text-danger">the deadline for this assignment has passed</h6>
+                        }
+                        <p class="text-succsess">Completed</p>
+                        <button style="width:200px;" class="btn btn-outline-primary mb-2" disabled>Add work</button>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-5 d-flex">
+                <div class="card card-custom shadow-sm flex-fill">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Your work</h5>
+                        @{
+                            var isClassroomActive = Model.ClassRoom.IsActive;
+                            var isDeadlinePassed = DateTime.Now > Model.DueDate;
+                        }
+                        @if (isDeadlinePassed)
+                        {
+                            <h6 class="text-danger">The deadline for this assignment has passed</h6>
+                        }
+                        <p class="text-danger">Missing</p>
+
+                        @if (isClassroomActive && !isDeadlinePassed)
+                        {
+                            <a style="width:200px;" class="btn btn-outline-primary mb-2" asp-action="AddHomework" asp-route-HomeworkId="@Model.Id">
+                                Add work
+                            </a>
+                        }
+                        else
+                        {
+                            <button style="width:200px;" class="btn btn-outline-primary mb-2" asp-action="AddHomework" asp-route-HomeworkId="@Model.Id" disabled>
+                                Add work
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="col-md-5 d-flex">
+                <div class="card card-custom shadow-sm flex-fill">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Your work</h5>
+                        @{
+                            var active = Model.ClassRoom.IsActive;
+                        }
+                        @if (DateTime.Now > Model.DueDate)
+                        {
+                            <h6 class="text-danger">the deadline for this assignment has passed</h6>
+                        }
+                        <p class="text-danger">Missing</p>
+                        @if (DateTime.Now > Model.DueDate)
+                        {
+                            <button style="width:200px;" class="btn btn-outline-primary mb-2" asp-action="AddHomework" asp-route-HomeworkId="@Model.Id" disabled>Add work</button>
+                        }
+                        else
+                        {
+                            <button style="width:200px;" class="btn btn-outline-primary mb-2" asp-action="AddHomework" asp-route-HomeworkId="@Model.Id")>Add work</button>
+                        }
+                    </div>
+                </div>
+            </div> *@
+        }
+
+    </div>
+</div>

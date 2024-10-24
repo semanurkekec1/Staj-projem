@@ -1,0 +1,90 @@
+﻿
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    Layout = "_Layout2";
+}
+@section CSSSection {
+    <style>
+        .class-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+            .class-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .class-header {
+            padding: 20px;
+            color: #fff;
+            position: relative;
+        }
+
+            .class-header h2 {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+
+            .class-header p {
+                font-size: 14px;
+                opacity: 0.8;
+            }
+
+        .class-body {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .class-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .class-actions i {
+            margin-left: 10px;
+            color: #5f6368;
+            cursor: pointer;
+        }
+
+            .class-actions i:hover {
+                color: #1a73e8;
+            }
+    </style>
+}
+
+<div class="main-content" id="main-content">
+    <div class="class-grid">
+        <!-- dongu -->
+        @foreach (var item in Model)
+        {
+            <a asp-controller="Classroom" asp-action="Index" asp-route-id="@item.Id" style="text-decoration: none;">
+                <div class="class-card">
+                    <div class="class-header" style="background-color: @item.Color">
+                        <h2>@item.Name</h2>
+                        <p>@item.Description</p>
+                        <p>@item.ApplicationUser.Name @item.ApplicationUser.Surname</p>
+                    </div>
+                    <div class="class-body">
+                        <div class="class-avatar" style="background-color: #43a047;">@item.ApplicationUser.Name[0]</div>
+                        <div class="class-actions">
+                            <i class="far fa-image"></i>
+                            <i class="far fa-folder"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

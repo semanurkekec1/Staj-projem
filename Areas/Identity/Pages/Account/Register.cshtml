@@ -1,0 +1,75 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="text-center mb-0">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="mb-3">
+                            <label asp-for="Input.Name" class="form-label">First Name</label>
+                            <input asp-for="Input.Name" class="form-control" autocomplete="name" aria-required="true" placeholder="Your First Name">
+                            <span asp-validation-for="Input.Name" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.Surname" class="form-label">Last Name</label>
+                            <input asp-for="Input.Surname" class="form-control" autocomplete="surname" aria-required="true" placeholder="Your Last Name">
+                            <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.Email" class="form-label">Email</label>
+                            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="example@email.com">
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.Password" class="form-label">Password</label>
+                            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password">
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
+                            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirm Password">
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <button id="registerSubmit" type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        Already have an account? <a href="/Identity/Account/Login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+        {
+            <div class="col-md-6">
+                <div class="card mt-3 mt-md-0">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="text-center mb-0">Register with External Service</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            @foreach (var provider in Model.ExternalLogins!)
+                            {
+                                <button type="submit" class="btn btn-secondary w-100 mb-2" name="provider" value="@provider.Name" title="Sign up with your @provider.DisplayName account">Sign up with @provider.DisplayName</button>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
